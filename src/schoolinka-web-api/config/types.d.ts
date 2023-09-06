@@ -5,7 +5,7 @@ export type ConfigTypes = {
     frontendAppUrl: string;
     store: {
         database: {
-            mongodb: IMongodb;
+            postgres: IPostgres;
         };
     };
     credentials: {
@@ -44,11 +44,14 @@ interface IJWT {
     expirationInterval: string;
 }
 
-interface IMongodb {
-    mongooseDebug: boolean;
-    uri: string;
-    secureHost: string;
-    testUri: string;
+interface IPostgres {
+    dialect: string;
+    host: string;
+    port: number;
+    userName: string;
+    password: string;
+    database: string;
+    databaseUrl: string;
 }
 
 export interface ErrorResponseInterface {

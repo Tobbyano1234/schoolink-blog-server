@@ -34,27 +34,27 @@
 //     });
 // });
 
-import { Socket } from "socket.io";
-export class SocketHandler {
-    static async connectionHandler(socket: Socket) {
-        socket.on('connection', (socket) => {
-            console.log('A user connected', socket);
+// import { Socket } from "socket.io";
+// export class SocketHandler {
+//     static async connectionHandler(socket: Socket) {
+//         socket.on('connection', (socket) => {
+//             console.log('A user connected', socket);
 
-            // Handle custom events
-            socket.emit('custom-event', (data: any) => {
-                console.log('Received custom event:', data);
-                // Broadcast the event to all connected clients
-                socket.emit('custom-event', data);
-            });
-        })
+//             // Handle custom events
+//             socket.emit('custom-event', (data: any) => {
+//                 console.log('Received custom event:', data);
+//                 // Broadcast the event to all connected clients
+//                 socket.emit('custom-event', data);
+//             });
+//         })
         
         
 
-        socket.on('disconnecting', () => {
-            (async () => {
-                console.log("disconnected");
-            })();
+//         socket.on('disconnecting', () => {
+//             (async () => {
+//                 console.log("disconnected");
+//             })();
 
-        });
-    }
-}
+//         });
+//     }
+// }

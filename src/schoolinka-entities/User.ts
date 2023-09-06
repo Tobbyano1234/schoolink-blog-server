@@ -1,11 +1,12 @@
-import { Schema, Document, model } from "mongoose";
+import { Optional } from "sequelize";
+import { Table, Model, CreatedAt, Column, UpdatedAt, Index, DataType } from 'sequelize-typescript';
 
-import { ModelNames } from "./models.names";
+// import { ModelNames } from "./models.names";
 import { AccountStatus } from "../typings/Account.types";
 
 
-
-export class User extends Document {
+export type UserAttributes = {
+    id: string;
     firstName: string;
     lastName: string;
     phoneNumber: string;
@@ -16,61 +17,52 @@ export class User extends Document {
     isNewUser: boolean;
     isVerified: boolean;
     isDeactivatedAccount: boolean;
-}
+};
 
-const UserSchema = new Schema(
-    {
-        firstName: {
-            type: String,
-            minlength: 2,
-            maxlength: 25,
-            trim: true,
-            lowercase: false,
-            // required: true,
-        },
-        lastName: {
-            type: String,
-            minlength: 2,
-            maxlength: 25,
-            trim: true,
-            lowercase: false,
-            // required: true,
-        },
-        username: {
-            type: String,
-            minlength: 2,
-            maxlength: 20,
-            trim: true,
-            lowercase: true,
-        },
-        fullName: {
-            type: String,
-            // required: true,
-        },
-        phoneNumber: {
-            type: String,
-            trim: true,
-        },
-        email: { type: String, index: true, required: true },
-        password: { type: String, required: true },
-        avatar: { type: String },
-        status: {
-            type: String,
-            trim: true,
-            lowercase: true,
-            enum: [
-                AccountStatus.ACTIVE,
-                AccountStatus.INACTIVE,
-                AccountStatus.SUSPENDED,
-                AccountStatus.BANNED,
-            ],
-            default: AccountStatus.ACTIVE,
-        },
-        isNewUser: { type: Boolean, default: true },
-        isVerified: { type: Boolean, default: false },
-        isDeactivatedAccount: { type: Boolean, default: false },
-    },
-    { timestamps: true }
-);
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-export const UserModel = model<User>(ModelNames.USER, UserSchema);
+@Table
+export class User extends Model<UserAttributes, UserCreationAttributes> {
+    @Index('id_index')
+    @Column(DataType.UUIDV4)
+    id!: string;
+   
+    @Column
+    firstName!: string;
+  
+    @Column
+    lastName!: string;
+
+    @Column
+    phoneNumber!: string;
+
+    @Index('email_index')
+    @Column
+    email!: string;
+    
+    @Column
+    password!: string;
+
+    @Column
+    avatar?: string;
+
+    @Column
+    status!: string;
+
+    @Column({defaultValue: false})
+    isNewUser: boolean;
+
+    @Column({defaultValue:false})
+    isVerified!: boolean;
+    
+    @Column({defaultValue:false})
+    isDeactivatedAccount: boolean;
+    
+    @CreatedAt
+    @Column
+    createdAt!: Date;
+  
+    @UpdatedAt
+    @Column
+    updatedAt!: Date;
+};
