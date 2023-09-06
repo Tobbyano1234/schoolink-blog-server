@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  postgresql:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - ./.db.env
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - public
+  admin:
+    image: adminer:latest
+    restart: always
+    depends_on:
+      - postgresql
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgresql
+      - ADMINER_DESIGN=hydra
+    ports:
+      - "8080:8080"
+    networks:
+      - public
+networks:
+  public:
+    driver: bridge
+volumes:
+  db:
