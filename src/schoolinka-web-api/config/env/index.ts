@@ -17,11 +17,14 @@ export const config: ConfigTypes = {
     apiDocs:envVariables.API_DOCS,
     store: {
         database: {
-            mongodb: {
-                mongooseDebug: envVariables.MONGOOSE_DEBUG,
-                uri: envVariables.MONGO_HOST,
-                secureHost: envVariables.MONGO_SECURE_HOST,
-                testUri: envVariables.MONGO_HOST_TEST,
+            postgres: {
+                dialect: envVariables.POSTGRES_DB_DIALECT,
+                host: envVariables.POSTGRES_DB_HOST,
+                port: envVariables.POSTGRES_DB_PORT,
+                userName: envVariables.POSTGRES_DB_USER,
+                password: envVariables.POSTGRES_DB_PASSWORD,
+                database: envVariables.POSTGRES_DB_NAME,
+                databaseUrl: envVariables.POSTGRES_DATABASE_URL,
             },
         },
     }

@@ -1,11 +1,11 @@
 {
   "name": "mainstack",
   "version": "1.0.0",
-  "main": "/src/web-api/api/index",
+  "main": "/src/schoolinka-web-api/api/index",
   "license": "MIT",
   "scripts": {
-    "start": "node ./dist/src/web-api/api/index.js",
-    "dev": "nodemon ./src/web-api/api/index.ts",
+    "start": "node ./dist/src/schoolinka-web-api/api/index.js",
+    "dev": "nodemon ./src/schoolinka-web-api/api/index.ts",
     "tsc": "tsc",
     "postinstall": "tsc",
     "test": "jest"
@@ -28,9 +28,11 @@
     "pino": "^8.10.0",
     "pino-pretty": "^9.2.0",
     "sequelize": "^6.32.1",
+    "sequelize-typescript": "^2.1.5",
     "sqlite3": "^5.1.6",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^4.9.5"
+    "typescript": "^5.2.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",

@@ -1,4 +1,4 @@
-import { ProductModel } from "../../entities";
+import { ProductModel } from "../../schoolinka-entities";
 import httpStatus from "http-status";
 import { CreateProductDTO } from "../DTOs/CreateProductDTO";
 

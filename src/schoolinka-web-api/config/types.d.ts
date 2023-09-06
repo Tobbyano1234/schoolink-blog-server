@@ -4,17 +4,20 @@ export type ConfigTypes = {
     apiDocs: string;
     store: {
         database: {
-            mongodb: IMongodb;
+            postgres: IPostgres;
         };
     };
 };
 
 
-interface IMongodb {
-    mongooseDebug: boolean;
-    uri: string;
-    secureHost: string;
-    testUri: string;
+interface IPostgres {
+        dialect: string;
+        host: string;
+        port: number;
+        userName: string;
+        password: string;
+        database: string;
+        databaseUrl: string;
 }
 
 

@@ -2,7 +2,7 @@ export * from "./database";
 
 export * from "./env";
 
-export * from "../config";
+export * from ".";
 
 export * from "./errors";
 

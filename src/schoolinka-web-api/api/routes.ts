@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { config } from '../config';
 
-import productRoute from "../../products/api/routes/index";
+import productRoute from "../../schoolinka-products/api/routes/index";
 
 const router = Router();
 

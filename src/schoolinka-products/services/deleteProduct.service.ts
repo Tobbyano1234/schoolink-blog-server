@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import { ProductModel } from "../../entities";
+import { ProductModel } from "../../schoolinka-entities";
 import { DeleteProductDTO } from "../DTOs/DeleteProductDTO";
 import { getProductByIDService } from "./getProduct.service";
 

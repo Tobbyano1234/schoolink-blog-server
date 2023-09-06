@@ -1,4 +1,4 @@
-import { ProductModel } from "../../entities";
+import { ProductModel } from "../../schoolinka-entities";
 import httpStatus from "http-status";
 import { GetProductTableDTO } from "../DTOs/PaginatioDTO";
 import { pagination } from "../../shared/helpers/pagination";
