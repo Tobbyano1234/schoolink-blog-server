@@ -1,4 +1,6 @@
-import { Sequelize } from 'sequelize';
+
+
+import mongoose, { ConnectOptions } from 'mongoose';
 
 // config should be imported before importing any other file
 import { config } from '../env';
@@ -6,27 +8,44 @@ import { LiveDBConnectOptions, MockDBConnectOptions } from './connect.options';
 import logger from '../utils/logger';
 
 
-export const LiveDatabaseManager = (connectionURI: string, options: any, func: () => void) => {
-    // console.log
+export const LiveDatabaseManager = (connectionURI: string, options: ConnectOptions, func: () => void) => {
     return function init() {
-        const sequelize = new Sequelize(connectionURI, options);
-        
-        sequelize
-            .authenticate()
+        mongoose
+            .connect(connectionURI, options)
             .then(() => {
                 logger.info(
-                    'Live PostgreSQL Database connected.'
+                    'Live MongoDB Database connected.'
                 );
                 func();
             })
             .catch((err: any) => {
                 logger.error(
-                    'Live PostgreSQL connection error. Please make sure PostgreSQL is running.\n' + err
+                    'Live MongoDB connection error. Please make sure MongoDB is running.\n' + err
                 );
                 process.exit(1);
             });
 
-        sequelize.sync();
+        const db = mongoose.connection;
+
+        db.on('error', (err: any) => {
+            logger.error(
+                'MongoDB error:\n' + err
+            );
+        });
+
+        // // print mongoose logs in dev env
+        // if (config.store.database.mongodb.mongooseDebug) {
+        //     mongoose.set(
+        //         'debug',
+        //         (collectionName: String, method: String, query: String, doc: Document) => {
+        //             debug('perday-server:index')(
+        //                 `${collectionName}.${method}`,
+        //                 util.inspect(query, false, 20),
+        //                 doc,
+        //             );
+        //         }
+        //     );
+        // }
     }
 };
 
@@ -34,41 +53,38 @@ export const LiveDatabaseManager = (connectionURI: string, options: any, func: (
 /**
  * Connect to the test database.
  */
-export const MockDatabaseManager = (dialect: string, sequelizeOpts: any = {}) => {
-    let dbConnection: Sequelize;
-    
-    if (dialect === config.store.database.postgres.dialect) {
+export const MockDatabaseManager = (uri: string, mongooseOpts: ConnectOptions = {}) => {
+    /**
+     * @ATTENTION @CAUTION Operations on live server will delete the entire database.
+     */
+    if (uri === config.store.database.mongodb.uri) {
         throw new Error('Attempt to use LIVE_DATABASE for testing');
     }
     return {
         setup: async () => {
             try {
-                const connectOptions = sequelizeOpts || MockDBConnectOptions; 
-                dbConnection = new Sequelize(connectOptions);
+                const connectOptions = mongooseOpts || MockDBConnectOptions;
+                const dbConnection = await mongoose.connect(uri, connectOptions);
                 dbConnection && console.info(
-                    'Test Postgres Database connected.'
+                    'Test MongoDB Database connected.'
                 );
             } catch (error: any) {
                 console.error(
-                    'Test Postgres connection error. Please make sure postgres server is running.\n' + error
+                    'Test MongoDB connection error. Please make sure MongoDB is running.\n' + error
                 );
                 process.exit(1);
             }
         },
-        close: async () => { 
-             if (dbConnection) {
-            await dbConnection.close();
-            console.info('Test Postgres Database connection closed.');
-        }
+        close: async () => {
+            await mongoose.connection.close();
         },
         clear: async () => {
-            if (dbConnection) {
-                const models = dbConnection.models;
-                for (const model in models) {
-                    await models[model].destroy({ where: {} });
-                }
-                console.info('Test Postgres Database data cleared.');
-            }
+            const collections = mongoose.connection.collections;
+
+            for (const key in collections) {
+                const collection = collections[key];
+                await collection.deleteMany({});
+            };
         },
     };
 };
@@ -77,11 +93,11 @@ export const startDB = () => {
     let connectionString;
     return {
         'test': () => {
-            connectionString = config.store.database.postgres.dialect;
+            connectionString = config.store.database.mongodb.testUri;
             return MockDatabaseManager(connectionString);
         },
         'live': (func: () => void) => {
-            connectionString = config.store.database.postgres.databaseUrl;
+            connectionString = config.store.database.mongodb.uri;
             return LiveDatabaseManager(connectionString, LiveDBConnectOptions, func)();
         }
     };

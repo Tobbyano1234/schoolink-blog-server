@@ -4,7 +4,7 @@ import { isCelebrate } from 'celebrate';
 
 import { config } from '../env';
 import { ErrorResponseInterface, ExpressErrorInterface } from '../types';
-import { APIError, JoiErrorFormatter } from '../../../shared/errors';
+import { APIError, JoiErrorFormatter } from '../../../famwork-shared/errors';
 
 const customError = () => {
   const handler = (

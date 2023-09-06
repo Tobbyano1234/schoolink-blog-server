@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import logger from "morgan";
 import helmet from "helmet";
-import routes from "./routes";
+import v1Routes from "./v1/routes";
 import { error } from "../config/errors";
 
 
@@ -15,10 +15,10 @@ function createServer() {
         .use(helmet({ dnsPrefetchControl: false, frameguard: false, ieNoOpen: false }))
         .use(cors({ credentials: true, origin: true }))
         .use(cookieParser())
-        .use(logger("tiny"))
+        .use(logger("dev"))
         .use(express.json())
         .use(express.urlencoded({ extended: true }))
-        .use("/api/v1", routes)
+        .use("/api/v1", v1Routes)
         .use(error.converter)
         .use(error.notFound)
         .use(error.handler)

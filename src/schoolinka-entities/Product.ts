@@ -1,12 +1,21 @@
-import { Optional } from "sequelize";
-import { Table, Model } from "sequelize-typescript";
+// import { Document, Schema, model } from "mongoose";
+// import { ModelNames } from "./models.names";
 
-type User = {
-    firstName: string;
-    lastName: string;
-    email:string;
-    phoneNumber:string;
-    status:Account
-    password:string;
+// export class Product extends Document {
+//     name: string;
+//     description: string;
+//     price: number;
+//     imageUrl: string;
+// };
 
-}
+
+// const ProductSchema = new Schema({
+//     name: { type: String, required: true },
+//     description: { type: String, required: true },
+//     price: { type: Number, required: true },
+//     imageUrl: { type: String, required: true }
+// },
+//     { timestamps: true },
+// );
+
+// export const ProductModel = model<Product>(ModelNames.PRODUCT, ProductSchema);

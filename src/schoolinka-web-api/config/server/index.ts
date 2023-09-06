@@ -5,11 +5,13 @@ import { Application } from 'express';
 import { config } from '../env';
 import logger from '../utils/logger';
 
+let server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
 export const Server = (
     ExpressApplication: Application,
     port: string | number,
 ) => {
-    const server = new http.Server(ExpressApplication);
+    server = new http.Server(ExpressApplication);
+    // const server = new http.Server(ExpressApplication);
     return {
         'test': () =>
             server.listen(port,
@@ -18,8 +20,13 @@ export const Server = (
             server.listen(port,
                 () => logger.info(
                     `🚀 Server ready and listening at (${config.env}) ==> http://localhost:${port}`)),
+        'httpServer': server,
     };
 };
+
+// export const getServer = {
+//     httpServer: server
+// }
 
 
 
