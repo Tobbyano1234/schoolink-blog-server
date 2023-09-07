@@ -1,13 +1,15 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 
 // config should be imported before importing any other file
 import { config } from '../env';
 import { LiveDBConnectOptions, MockDBConnectOptions } from './connect.options';
 import logger from '../utils/logger';
+import { User } from '../../../schoolinka-entities';
+import { Post } from '../../../schoolinka-entities/Post';
 
 
 export const LiveDatabaseManager = (connectionURI: string, options: any, func: () => void) => {
-    // console.log
+
     return function init() {
         const sequelize = new Sequelize(connectionURI, options);
         
@@ -17,7 +19,13 @@ export const LiveDatabaseManager = (connectionURI: string, options: any, func: (
                 logger.info(
                     'Live PostgreSQL Database connected.'
                 );
-                func();
+                sequelize.addModels([User, Post]);
+                sequelize.sync().then(() => {
+                    func();
+                }).catch((err: any) => {
+                    logger.error('Error occurred during table creation.\n' + err);
+                    process.exit(1);
+                });
             })
             .catch((err: any) => {
                 logger.error(
@@ -25,8 +33,6 @@ export const LiveDatabaseManager = (connectionURI: string, options: any, func: (
                 );
                 process.exit(1);
             });
-
-        sequelize.sync();
     }
 };
 

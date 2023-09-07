@@ -1,9 +1,7 @@
-import { Optional } from "sequelize";
-import { Table, Model, CreatedAt, Column, UpdatedAt, Index, DataType } from 'sequelize-typescript';
+import { Table, Model, Column, Index, DataType, HasMany } from 'sequelize-typescript';
 
-// import { ModelNames } from "./models.names";
 import { AccountStatus } from "../typings/Account.types";
-
+import { Post } from './Post';
 
 export type UserAttributes = {
     id: string;
@@ -13,56 +11,87 @@ export type UserAttributes = {
     email: string;
     password: string;
     avatar?: string;
-    status: AccountStatus;
-    isNewUser: boolean;
-    isVerified: boolean;
-    isDeactivatedAccount: boolean;
+    status?: AccountStatus;
+    isNewUser?: boolean;
+    isVerified?: boolean;
+    isDeactivatedAccount?: boolean;
 };
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-@Table
-export class User extends Model<UserAttributes, UserCreationAttributes> {
-    @Index('id_index')
-    @Column(DataType.UUIDV4)
+@Table({ tableName: 'users', timestamps: true })
+export class User extends Model<UserAttributes> {
+    @Index
+    @Column({
+        primaryKey:true,
+        type: DataType.UUID,
+        allowNull: false
+    })
     id!: string;
-   
-    @Column
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     firstName!: string;
-  
-    @Column
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     lastName!: string;
 
-    @Column
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     phoneNumber!: string;
 
-    @Index('email_index')
-    @Column
+    @Index
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     email!: string;
-    
-    @Column
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     password!: string;
 
-    @Column
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
     avatar?: string;
 
-    @Column
+    @Column({
+        type: DataType.ENUM,
+        allowNull: true,
+        values: [AccountStatus.ACTIVE,
+        AccountStatus.INACTIVE,
+        AccountStatus.SUSPENDED,
+        AccountStatus.BANNED,]
+    })
     status!: string;
 
-    @Column({defaultValue: false})
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: true, defaultValue: true
+    })
     isNewUser: boolean;
 
-    @Column({defaultValue:false})
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: true, defaultValue: false
+    })
     isVerified!: boolean;
-    
-    @Column({defaultValue:false})
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: true, defaultValue: false
+    })
     isDeactivatedAccount: boolean;
-    
-    @CreatedAt
-    @Column
-    createdAt!: Date;
-  
-    @UpdatedAt
-    @Column
-    updatedAt!: Date;
+
+    @HasMany(() => Post, 'userId')
+    posts: Post[];
 };

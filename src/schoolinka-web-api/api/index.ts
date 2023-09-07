@@ -1,4 +1,4 @@
-// import { SocketHandler } from '../../famwork-push-server/services/push.server';
+import "reflect-metadata";
 import { config, Server, startDB } from '../config';
 import createServer from './app';
 // import { Server as SocketIO, ServerOptions } from 'socket.io';

@@ -1,4 +1,4 @@
-import { ModelNames } from "../famwork-entities";
+import { ModelNames } from "../schoolinka-entities";
 
 
 export enum AccountType {
