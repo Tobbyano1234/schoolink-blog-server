@@ -1,12 +1,11 @@
 import { Request } from "express";
 import httpStatus from "http-status";
-import { Types } from "mongoose";
 
-import { BaseController } from "../../../famwork-shared/api";
+import { BaseController } from "../../../schoolinka-shared/api";
 import { LocalSignInDTO } from "../../DTOs/signIn.DTO";
 import { LocalSignUpAdminDTO } from "../../DTOs/signUp.DTO";
 import {
-  LocalSignInUserService,
+  // LocalSignInUserService,
   LocalSignUpUserService,
   MailSendAdminOtpService,
   MailSendUserOtpService,
@@ -18,11 +17,11 @@ import {
   VerifyUserEmailService,
   ResetUserPasswordService,
   ChangeUserPasswordService,
-} from "../../../famwork-auth/services";
-import { MailSendOtpDTO } from "../../../famwork-auth/DTOs/sendOtp.DTO";
-import { MailVerifyOtpDTO } from "../../../famwork-auth/DTOs/verifyOtp.DTO";
-import { LoginStatusService } from "../../../famwork-auth/services";
-import { LoginStatusDTO } from "../../../famwork-auth/DTOs/LoginStatusDTO";
+} from "../../../schoolinka-auth/services";
+import { MailSendOtpDTO } from "../../../schoolinka-auth/DTOs/sendOtp.DTO";
+import { MailVerifyOtpDTO } from "../../../schoolinka-auth/DTOs/verifyOtp.DTO";
+import { LoginStatusService } from "../../../schoolinka-auth/services";
+import { LoginStatusDTO } from "../../../schoolinka-auth/DTOs/LoginStatusDTO";
 import {
   ChangeAdminPasswordDTO,
   ChangeUserPasswordDTO,
@@ -31,18 +30,18 @@ import {
   VerifyAdminPasswordDTO,
   VerifyUserEmailDTO,
   VerifyUserPasswordDTO,
-} from "../../../famwork-auth/DTOs/passwordManager.DTO";
-import { LocalSignUpUserDTO } from "../../../famwork-auth/DTOs/signUp.DTO";
+} from "../../../schoolinka-auth/DTOs/passwordManager.DTO";
+import { LocalSignUpUserDTO } from "../../../schoolinka-auth/DTOs/signUp.DTO";
 import {
   VerifyAdminPasswordService,
   VerifyAdminEmailService,
   ResetAdminPasswordService,
   ChangeAdminPasswordService,
-} from "../../../famwork-auth/services/passwordManager.admin.service";
-import { SocketHandler } from "../../../famwork-push-server/services/push.server";
-import { Socket } from "socket.io";
-// import { UserSuspendAccountDTO } from "src/famwork-auth/DTOs/suspendAccount.DTO";
-// import { DeactivateAccountDTO } from "src/famwork-auth/DTOs/deactivateAccount.DTO";
+} from "../../../schoolinka-auth/services/passwordManager.admin.service";
+// import { SocketHandler } from "../../../schoolinka-push-server/services/push.server";
+// import { Socket } from "socket.io";
+// import { UserSuspendAccountDTO } from "src/schoolinka-auth/DTOs/suspendAccount.DTO";
+// import { DeactivateAccountDTO } from "src/schoolinka-auth/DTOs/deactivateAccount.DTO";
 
 export class AuthController {
   static signUpUser = BaseController(async (request: Request) => {
@@ -57,28 +56,28 @@ export class AuthController {
     };
   });
 
-  static signInUser = BaseController(async (request: Request) => {
-    const LocalSignInDTO = request.body as LocalSignInDTO;
-    const { success, message, data, token } = await LocalSignInUserService(
-      LocalSignInDTO
-    );
-    SocketHandler.messageHandler(data)
-    // SocketHandler.connectionHandler()
-    return {
-      status: success ? httpStatus.OK : httpStatus.UNAUTHORIZED,
-      message,
-      data,
-      token,
-    };
-  });
+  // static signInUser = BaseController(async (request: Request) => {
+  //   const LocalSignInDTO = request.body as LocalSignInDTO;
+  //   const { success, message, data, token } = await LocalSignInUserService(
+  //     LocalSignInDTO
+  //   );
+  //   SocketHandler.messageHandler(data)
+  //   // SocketHandler.connectionHandler()
+  //   return {
+  //     status: success ? httpStatus.OK : httpStatus.UNAUTHORIZED,
+  //     message,
+  //     data,
+  //     token,
+  //   };
+  // });
 
   static signInStatus = BaseController(async (request: Request) => {
     const LoginStatusDTO = request.body as LoginStatusDTO;
     if (LoginStatusDTO.userID) {
-      LoginStatusDTO.userID = new Types.ObjectId(LoginStatusDTO.userID);
+      LoginStatusDTO.userID = (LoginStatusDTO.userID);
     }
     if (LoginStatusDTO.adminID) {
-      LoginStatusDTO.adminID = new Types.ObjectId(LoginStatusDTO.adminID);
+      LoginStatusDTO.adminID = (LoginStatusDTO.adminID);
     }
     const { success, message, data, token } = await LoginStatusService(
       LoginStatusDTO

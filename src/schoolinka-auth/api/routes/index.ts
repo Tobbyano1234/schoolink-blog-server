@@ -1,14 +1,14 @@
 import authValidation from '../validations';
 import { AuthController } from '../controllers';
-import { AuthMiddleware } from '../../../famwork-auth/middlewares';
-import { baseRouter, baseValidation } from '../../../famwork-shared/api';
+import { AuthMiddleware } from '../../../schoolinka-auth/middlewares';
+import { baseRouter, baseValidation } from '../../../schoolinka-shared/api';
 
 const { POST, router } = baseRouter();
 
 POST('/signup-user', [baseValidation(authValidation.signUpUser), AuthController.signUpUser]);
 POST('/signup-admin', [baseValidation(authValidation.signUpAdmin), AuthController.signUpAdmin]);
 
-POST('/signin-user', [baseValidation(authValidation.signInUser), AuthController.signInUser]);
+// POST('/signin-user', [baseValidation(authValidation.signInUser), AuthController.signInUser]);
 POST('/signin-admin', [baseValidation(authValidation.signInAdmin), AuthController.signInAdmin]);
 
 POST('/signin-status', [baseValidation(authValidation.signInStatusUser), AuthController.signInStatus]);

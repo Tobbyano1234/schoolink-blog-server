@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
 import { config } from '../../config';
 
-// import authRoute from "../../../famwork-auth/api/routes/index";
-// import taskRoute from "../../../famwork-task/api/routes/index";
-// import userRoute from "../../../famwork-accounts/user/api/routes/index";
-// import adminRoute from "../../../famwork-accounts/admin/api/routes/index";
+import authRoute from "../../../schoolinka-auth/api/routes/index";
+// import taskRoute from "../../../schoolinka-post/api/routes/index";
+import userRoute from "../../../schoolinka-accounts/user/api/routes/index";
+import adminRoute from "../../../schoolinka-accounts/admin/api/routes/index";
 
 const router = Router();
 
@@ -17,10 +17,10 @@ router.get('/health-check', (_req: Request, res: Response) =>
 router.route('/docs').get((_req: Request, res: Response) => res.redirect(config.apiDocs));
 
 // all route
-// router.use("/auth", authRoute);
+router.use("/auth", authRoute);
 // router.use("/task", taskRoute);
-// router.use("/user", userRoute);
-// router.use("/admin", adminRoute);
+router.use("/user", userRoute);
+router.use("/admin", adminRoute);
 
 
 export default router;
