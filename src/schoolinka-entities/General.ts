@@ -1,22 +1,22 @@
-import { ObjectId } from "mongodb";
-import { Schema, Document, model } from "mongoose";
+import { Table, Model, Column, Index, DataType, HasMany } from 'sequelize-typescript';
+
 import { ModelNames } from "./models.names";
 
-export class General extends Document {
+export type GeneralAttributes = {
   collectionName: ModelNames;
   collectionID: string;
   associatedData: { [key:string]: any };
   isValid: boolean;
 }
 
-const GeneralSchema = new Schema(
-  {
-    collectionName: { type: String, required: true },
-    collectionID: { type: ObjectId, required: true },
-    associatedData: { type: Object },
-    isValid: { type: Boolean, default: true },
- },
- { timestamps: true },
-);
+@Table({tableName:'general', timestamps:true})
+export class General extends Model<GeneralAttributes>{
+  @Index
+  @Column({})
+    collectionName!: string;
 
-export const GeneralModel = model<General>(ModelNames.GENERAL, GeneralSchema);
+    collectionID!: string;
+    associatedData: Object;
+    isValid: { type: Boolean, default: true },
+ }
+
